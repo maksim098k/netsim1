@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetSim - Обучающий тренажер по сетям</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="icon">🌐</span> NetSim
+            </div>
+            <nav class="course-nav">
+                <h3>Модуль 1: Маршрутизация</h3>
+                <ul>
+                    <li id="nav-l1" class="active" onclick="loadLesson(1)">Урок 1.1: Соединение двух ПК</li>
+                    <li id="nav-l2" onclick="loadLesson(2)">Урок 1.2: Поиск ошибки</li>
+                    <li id="nav-l3" onclick="loadLesson(3)">Урок 1.3: Основной шлюз</li>
+                    <li id="nav-l4" onclick="loadLesson(4)">Урок 1.4: Разбиение сети (Hard)</li>
+                </ul>
+                <h3 style="margin-top: 15px;">Модуль 2: Домашний Wi-Fi</h3>
+                <ul>
+                    <li id="nav-l5" onclick="loadLesson(5)">Урок 2.1: Настройка DHCP</li>
+                    <li id="nav-l6" onclick="loadLesson(6)">Урок 2.2: Защита сети WPA2</li>
+                </ul>
+                <h3 style="margin-top: 15px;">Модуль 3: Диагностика</h3>
+                <ul>
+                    <li id="nav-l7" onclick="loadLesson(7)">Урок 3.1: Работа с Ping</li>
+                    <li id="nav-l8" onclick="loadLesson(8)">Урок 3.2: Команда ipconfig</li>
+                </ul>
+                <h3 style="margin-top: 15px;">Модуль 4: Служба DNS</h3>
+                <ul>
+                    <li id="nav-l9" onclick="loadLesson(9)">Урок 4.1: Настройка DNS</li>
+                    <li id="nav-l10" onclick="loadLesson(10)">Урок 4.2: Утилита nslookup</li>
+                </ul>
+                <h3 style="margin-top: 15px;">Модуль 5: Расширенные возможности</h3>
+                <ul>
+                    <li id="nav-l11" onclick="loadLesson(11)">Урок 5.1: Настройка ACL</li>
+                    <li id="nav-l12" onclick="loadLesson(12)">Урок 5.2: Протокол ARP</li>
+                    <li id="nav-l13" onclick="loadLesson(13)">Урок 5.3: Статический NAT</li>
+                    <li id="nav-l14" onclick="loadLesson(14)">Урок 5.4: Утилита tracert</li>
+                    <li id="nav-l15" onclick="loadLesson(15)">Урок 5.5: Команда netstat</li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="index.html" class="back-link" onclick="if(typeof DB!=='undefined')DB.logout()">← Выйти из аккаунта</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <h1 id="lesson-title">Урок 1.1: Соединение двух ПК</h1>
+                <div class="user-profile" id="sim-user-badge">Пользователь: —</div>
+            </header>
+
+            <!-- УРОК 1.1 -->
+            <div class="lesson-container" id="lesson-1-wrapper">
+                <section class="theory-section">
+                    <h2>Теория и задание</h2>
+                    <div class="video-container">
+                        <video src="видео/1.1.mp4" controls></video>
+                    </div>
+                    <div class="task-description">
+                        <p><strong>Задание:</strong> Два компьютера соединены прямым кабелем. Компьютер 1 уже настроен и имеет IP-адрес <code>192.168.1.5</code> со стандартной маской подсети класса C.</p>
+                        <br>
+                        <p>Настройте Компьютер 2 так, чтобы он находился в одной локальной сети с Компьютером 1.</p>
+                    </div>
+                </section>
+                <section class="sandbox-section">
+                    <h2>Тренажер</h2>
+                    <div class="network-topology">
+                        <div class="node pc" id="pc1">
+                            <div class="icon">💻</div>
+                            <div class="label">Компьютер 1</div>
+                            <div class="ip-info">IP: 192.168.1.5<br>Маска: 255.255.255.0</div>
+                        </div>
+                        <div class="link-cable" id="l1-cable"></div>
+                        <div class="node pc interactive" id="pc2" onclick="openSettings('l1')">
+                            <div class="icon">💻</div>
+                            <div class="label">Компьютер 2</div>
+                            <div class="ip-info" id="pc2-display-ip">Конфигурация не задана</div>
+                        </div>
+                    </div>
+                    <button class="btn primary" onclick="checkLesson1()">Проверить сеть (Ping)</button>
+                    <div id="result-message-1" class="result-message"></div>
+                </section>
+            </div>
+
+            <!-- УРОК 1.2 -->
+            <div class="lesson-container" id="lesson-2-wrapper" style="display: none;">
+                <section class="theory-section">
+                    <h2>Теория и задание: Ищем ошибку</h2>
+                    <div class="video-container">
+                        <video src="1.2.mp4" controls></video>
+                    </div>
+                    <div class="task-description">
+                        <p><strong>Задание:</strong> Все компьютеры подключены через коммутатор. Найдите ошибку в адресации ПК 3 и исправьте её так, чтобы он был в одной сети с ПК 1 и 2.</p>
+                    </div>
+                </section>
+                <section class="sandbox-section">
+                    <h2>Тренажер</h2>
+                    <div class="network-topology-v2" style="margin-bottom: 30px;">
+                        <div class="nodes-row">
+                            <div class="node pc" id="l2-pc1" style="width: 140px;">
+                                <div class="icon" style="font-size: 40px;">💻</div><div class="label" style="font-size: 13px;">ПК 1</div><div class="ip-info" style="font-size: 11px;">192.168.0.10</div>
+                            </div>
+                            <div class="link-cable" id="l2-cable1" style="width: 50px;"></div>
+                            <div class="vertical-connection">
+                                <div class="node switch" style="width: 140px;"><div class="icon" style="font-size: 40px;">🖧</div><div class="label" style="font-size: 13px;">Коммутатор</div></div>
+                                <div class="link-cable vertical" id="l2-cable3" style="width: 4px; height: 30px; background-color: var(--border);"></div>
+                                <div class="node pc interactive" id="l2-pc3" onclick="openSettings('l2')" style="width: 160px; border-color: var(--danger); animation: pulseBorder 2s infinite;">
+                                    <div class="icon" style="font-size: 40px;">💻</div><div class="label" style="font-size: 13px;">ПК 3 (Проблема)</div><div class="ip-info" id="l2-pc3-display-ip" style="background-color: rgba(239,68,68,0.1); color: var(--danger); font-size: 11px;">192.169.0.12<br>255.255.255.0</div>
+                                </div>
+                            </div>
+                            <div class="link-cable" id="l2-cable2" style="width: 50px;"></div>
+                            <div class="node pc" id="l2-pc2" style="width: 140px;">
+                                <div class="icon" style="font-size: 40px;">💻</div><div class="label" style="font-size: 13px;">ПК 2</div><div class="ip-info" style="font-size: 11px;">192.168.0.11</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn primary" onclick="checkLesson2()">Отправить Ping на ПК 1</button>
+                    <div id="result-message-2" class="result-message"></div>
+                </section>
+            </div>
+
+            <!-- УРОК 1.3 -->
+            <div class="lesson-container" id="lesson-3-wrapper" style="display: none;">
+                <section class="theory-section">
+                    <h2>Теория и задание: Выход в Интернет</h2>
+                    <div class="video-container">
+                        <video src="видео/1.3.mp4" controls></video>
+                    </div>
+                    <div class="task-description">
+                        <p><strong>Задание:</strong> Найдите IP-адрес интерфейса роутера на схеме и укажите его в качестве <strong>Основного шлюза</strong> в настройках ПК.</p>
+                    </div>
+                </section>
+                <section class="sandbox-section">
+                    <h2>Тренажер</h2>
+                    <div class="network-topology-v2" style="margin-bottom: 30px;">
+                        <div class="nodes-row">
+                            <div class="node pc interactive" id="l3-pc1" onclick="openSettings('l3')" style="width: 140px; border-color: var(--primary); animation: pulseBorder 2s infinite;">
+                                <div class="icon" style="font-size: 40px;">💻</div>
+                                <div class="label" style="font-size: 13px;">Мой ПК</div>
+                                <div class="ip-info" id="l3-pc1-display-ip" style="background-color: rgba(67,97,238,0.08); color: var(--text-main); font-size: 11px;">192.168.1.15<br>255.255.255.0<br>Шлюз: ---</div>
+                            </div>
+                            <div class="link-cable" id="l3-cable1" style="width: 60px;"></div>
+                            <div class="node router" style="width: 120px; height: 120px; justify-content: center;">
+                                <div class="icon" style="font-size: 40px; margin: 0;">🖲️</div>
+                                <div class="label" style="font-size: 12px; margin-top: 5px;">Шлюз (Router)<br><span style="color:var(--success)">192.168.1.1</span></div>
+                            </div>
+                            <div class="link-cable" id="l3-cable2" style="width: 60px;"></div>
+                            <div class="node" style="width: 140px; border-color: #38bdf8;">
+                                <div class="icon" style="font-size: 40px;">🌐</div>
+                                <div class="label" style="font-size: 13px;">Интернет</div>
+                                <div class="ip-info" style="font-size: 11px; background-color: rgba(56, 189, 248, 0.1); color: #38bdf8;">8.8.8.8</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn primary" onclick="checkLesson3()">Ping 8.8.8.8 (Интернет)</button>
+                    <div id="result-message-3" class="result-message"></div>
+                </section>
+            </div>
+
+            <!-- УРОК 1.4 -->
+            <div class="lesson-container" id="lesson-4-wrapper" style="display: none;">
+                <section class="theory-section">
+                    <h2>Хардкор: Разбиение на подсети</h2>
+                    <div class="video-container">
+                        <video src="видео/1.4.mp4" controls></video>
+                    </div>
+                    <div class="task-description">
+                        <p><strong>Ситуация:</strong> Отделы Финансов и Кадров делят общее пространство <code>10.0.0.0/24</code>. В целях безопасности их нужно аппаратно разделить на ДВЕ подсети по 128 адресов.</p>
+                        <br>
+                        <p><strong>Задание:</strong> Отдел Финансов занимает <code>10.0.0.0 - 127</code>. Кадры занимают вторую половину пула <code>10.0.0.128 - 255</code>.</p>
+                        <p>Присвойте ПК Кадров валидный адрес из его блока (например, 130-ый) и <strong>задайте правильную маску (/25)</strong>.</p>
+                    </div>
+                </section>
+                <section class="sandbox-section">
+                    <h2>Тренажер безопасности</h2>
+                    <div class="network-topology-v2" style="margin-bottom: 30px;">
+                        <div class="nodes-row">
+                            <div class="node pc" style="width: 140px; border-color: #f59e0b;">
+                                <div class="icon" style="font-size: 40px;">💼</div><div class="label" style="font-size: 13px;">Финансы</div><div class="ip-info" style="font-size: 10px; color: #f59e0b; background-color: rgba(245, 158, 11, 0.1);">10.0.0.5<br>255.255.255.128</div>
+                            </div>
+                            <div class="link-cable" id="l4-cable1" style="width: 50px;"></div>
+                            <div class="node switch" style="width: 140px;"><div class="icon" style="font-size: 40px;">🖧</div><div class="label" style="font-size: 13px;">VLAN Коммутатор</div></div>
+                            <div class="link-cable" id="l4-cable2" style="width: 50px;"></div>
+                            <div class="node pc interactive" id="l4-pc-hr" onclick="openSettings('l4')" style="width: 140px; border-color: var(--primary);">
+                                <div class="icon" style="font-size: 40px;">👥</div><div class="label" style="font-size: 13px;">Кадры</div><div class="ip-info" id="l4-hr-display-ip">Не задано</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn primary" onclick="checkLesson4()" style="background-color: var(--danger);">Применить политику сети</button>
+                    <div id="result-message-4" class="result-message"></div>
+                </section>
+            </div>
+
+            <!-- УРОК 2.1 -->
+            <div class="lesson-container" id="lesson-5-wrapper" style="display: none;">
+                <section class="theory-section">
+                    <h2>Теория: Настройка DHCP</h2>
+                    <div class="video-container">
+                        <video src="видео/2.1.mp4" controls></video>
+                    </div>
+                    <div class="task-description">
+                        <p><strong>Ситуация:</strong> Смартфоны и планшеты не могут подключиться к роутеру, так как им не выдаются IP-адреса.</p>
+                        <br>
+                        <p><strong>Задание:</strong> Включите службу <strong>DHCP Server</strong> и задайте диапазон выдаваемых IP-адресов от <code>192.168.1.100</code> до <code>192.168.1.199</code>.</p>
+                    </div>
+                </section>
+                <section class="sandbox-section">
+                    <h2>Web-интерфейс Роутера</h2>
+                    <div class="router-ui" style="margin-bottom: 20px;">
+                        <div class="router-ui-header">TP-Network Firmware</div>
+                        <div class="router-ui-body">
+                            <div class="router-ui-sidebar">
+                                <ul>
+                                    <li>Status</li>
+                                    <li>Network</li>
+                                    <li>Wireless</li>
+                                    <li class="active">DHCP Settings</li>
+                                </ul>
+                            </div>
+                            <div class="router-ui-content">
+                                <h3>DHCP Settings</h3>
+                                <hr>
+                                <div class="form-group-router">
+                                    <label style="width: 150px;">DHCP Server:</label>
+                                    <div style="display: flex; gap: 10px;">
+                                        <label><input type="radio" id="dhcp-disable" name="dhcp-status" checked> Disable</label>
+                                        <label><input type="radio" id="dhcp-enable" name="dhcp-status"> Enable</label>
+                                    </div>
+                                </div>
+                                <div class="form-group-router">
+                                    <label style="width: 150px;">Start IP Address:</label>
+                                    <input type="text" id="dhcp-start" placeholder="Например: 192.168.1.50">
+                                </div>
+                                <div class="form-group-router">
+                                    <label style="width: 150px;">End IP Address:</label>
+                                    <input type="text" id="dhcp-end" placeholder="Например: 192.168.1.254">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn primary" onclick="checkLesson5()">Применить настройки (Save)</button>
+                    <div id="result-message-5" class="result-message"></div>
+                </section>
+            </div>
+
+            <!-- УРОК 2.2 -->
+            <div class="lesson-container" id="lesson-6-wrapper" style="display: none;">
+                <section class="theory-section">
+                    <h2>Теория: Защита Wi-Fi домашней сети</h2>
+                    <div class="video-container">
+                        <video src="видео/2.2.mp4" controls></video>
+                    </div>
+                    <div class="task-description">
+                        <p><strong>Задание:</strong> В веб-интерфейсе перейдите к настройкам безопасности (Раздел Wireless Settings).</p>
+                        <ol style="margin-left: 20px; line-height: 1.6;">
+                            <li>Задайте уникальное имя сети (SSID).</li>
+                            <li>Включите современную защиту <strong>WPA/WPA2-PSK</strong>.</li>
+                            <li>Установите надежный пароль (>= 8 символов).</li>
+                        </ol>
+                    </div>
+                </section>
+                <section class="sandbox-section">
+                    <h2>Web-интерфейс Роутера</h2>
+                    <div class="router-ui" style="margin-bottom: 20px;">
+                        <div class="router-ui-header">TP-Network Firmware</div>
+                        <div class="router-ui-body">
+                            <div class="router-ui-sidebar">
+                                <ul>
+                                    <li>Status</li>
+                                    <li>Network</li>
+                                    <li class="active">Wireless Settings</li>
+                                    <li>DHCP Settings</li>
+                                </ul>
+                            </div>
+                            <div class="router-ui-content">
+                                <h3>Wireless Security</h3>
+                                <hr>
+                                <div class="form-group-router">
+                                    <label style="width: 150px;">Network Name (SSID):</label>
+                                    <input type="text" id="wifi-ssid" value="TP-Link_DEFAULT">
+                                </div>
+                                <div class="form-group-router" style="margin-top: 15px;">
+                                    <label style="width: auto; cursor:pointer;"><input type="radio" id="sec-none" name="wifi-sec" checked> Disable Security (Открытая сеть)</label>
+                                </div>
+                                <div class="form-group-router">
+                                    <label style="width: auto; cursor:pointer;"><input type="radio" id="sec-wep" name="wifi-sec"> WEP (Устаревшее шифрование)</label>
+                                </div>
+                                <div class="form-group-router">
+                                    <label style="width: auto; cursor:pointer;"><input type="radio" id="sec-wpa2" name="wifi-sec"> WPA/WPA2-PSK (Рекомендуется)</label>
+                                </div>
+                                
+                                <div id="wpa2-settings" style="margin-top: 15px; padding: 15px; background: rgba(67, 97, 238, 0.05); border-left: 3px solid var(--primary); display: none;">
+                                    <div class="form-group-router" style="margin-bottom:0;">
+                                        <label style="width: 100px; font-weight:600;">PSK Password:</label>
+                                        <input type="password" id="wifi-pass" placeholder="Минимум 8 символов">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn primary" onclick="checkLesson6()">Reboot & Save Settings</button>
+                    <div id="result-message-6" class="result-message"></div>
+                </section>
+            </div>
+
+            <!-- УРОК 3.1 (PING) -->
+            <div class="lesson-container" id="lesson-7-wrapper" style="display: none;">
+                <section class="theory-section">
+                    <h2>Теория: Команда Ping</h2>
+                    <div class="video-container">
+                        <video src="видео/3.1.mp4" controls></video>
+                    </div>
+                    <div class="task-description">
+                        <p><strong>Ситуация:</strong> У вас перестал работать интернет. Как понять, проблема в вашем роутере или у провайдера?</p>
+                        <br>
+                        <p><strong>Задание:</strong> Используйте командную строку (терминал cmd), чтобы продиагностировать сеть утилитой <code>ping</code>.</p>
+                        <ol style="margin-left: 20px; line-height: 1.6;">
+                            <li>Проверьте связь с вашим роутером: введите команду <code>ping 192.168.1.1</code>. Убедитесь, что связь есть.</li>
+                            <li>Проверьте связь с внешним миром: введите <code>ping 8.8.8.8</code>.</li>
+                        </ol>
+                        <br>
+                        <p><em>Как только вы выполните (напишете и нажмете Enter) обе команды, система засчитает урок: мы узнаем, что сломано за пределами локальной сети.</em></p>
+                    </div>
+                </section>
+
+                <section class="sandbox-section">
+                    <h2>Эмулятор командной строки (cmd)</h2>
+                    <div class="console-simulator" onclick="document.getElementById('console-7-input').focus()">
+                        <div id="console-7-output">
+                            Microsoft Windows [Version 10.0.19045.3086]<br>
+                            (c) Microsoft Corporation. All rights reserved.<br>
+                        </div>
+                        <div class="console-line" style="margin-top: 10px;">
+                            <span class="prompt">C:\Users\Student&gt;</span>
+                            <input type="text" id="console-7-input" class="console-input" autocomplete="off" spellcheck="false" onkeypress="handleConsole7(event)">
+                        </div>
+                    </div>
+                    <div id="result-message-7" class="result-message" style="margin-top: 20px;"></div>
+                </section>
+            </div>
+
+            <!-- УРОК 3.2 (IPCONFIG) -->
+            <div class="lesson-container" id="lesson-8-wrapper" style="display: none;">
+                <section class="theory-section">
+                    <h2>Теория: Команда ipconfig</h2>
+                    <div class="video-container">
+                        <video src="видео/3.2.mp4" controls></video>
+                    </div>
+                    <div class="task-description">
+                        <p><strong>Ситуация:</strong> Системный администратор просит вас продиктовать ваш IPv4-адрес для удаленного подключения, но графический интерфейс настройки мышки завис, работает только консоль.</p>
+                        <br>
+                        <p><strong>Задание:</strong></p>
+                        <ol style="margin-left: 20px; line-height: 1.6;">
+                            <li>В эмуляторе консоли введите команду <code>ipconfig</code> и нажмите Enter.</li>
+                            <li>Внимательно изучите полученный вывод. Найдите строку <strong>IPv4-адрес</strong>.</li>
+                            <li>Скопируйте/впишите найденный адрес в поле ответа под консолью и нажмите кнопку проверки.</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <section class="sandbox-section">
+                    <h2>Эмулятор командной строки (cmd)</h2>
+                    <div class="console-simulator" onclick="document.getElementById('console-8-input').focus()" style="min-height: 250px; max-height: 250px;">
+                        <div id="console-8-output">
+                            Microsoft Windows [Version 10.0.19045.3086]<br>
+                            (c) Microsoft Corporation. All rights reserved.<br>
+                        </div>
+                        <div class="console-line" style="margin-top: 10px;">
+                            <span class="prompt">C:\Users\Student&gt;</span>
+                            <input type="text" id="console-8-input" class="console-input" autocomplete="off" spellcheck="false" onkeypress="handleConsole8(event)">
+                        </div>
+                    </div>
+                    
+                    <div class="question-block" style="margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid var(--border); width: 100%; text-align: left;">
+                        <p style="margin-bottom: 10px; font-weight: 600;">Ответьте на вопрос (квалификация):</p>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Какой именно IPv4-адрес назначен вашему Ethernet-адаптеру?</p>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="l8-answer" placeholder="Пример: 192.168.x.x" style="flex: 1; padding: 10px 15px; border-radius: 4px; border: 1px solid var(--border); background: #ffffff; color: var(--text-main); outline: none;">
+                            <button class="btn primary" onclick="checkLesson8()" style="width: auto;">Отправить ответ</button>
+                        </div>
+                        <div id="result-message-8" class="result-message" style="margin-top: 15px;"></div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- УРОК 4.1 -->
+            <div class="lesson-container" id="lesson-9-wrapper" style="display: none;">
+                <section class="theory-section">
+                    <h2>Теория: Зачем нужен DNS-сервер?</h2>
+                    <div class="video-container">
+                        <video src="видео/4.1.mp4" controls></video>
+                    </div>
+                    <div class="task-description">
+                        <p><strong>Ситуация:</strong> Ваш компьютер нормально выходит в интернет по IP-адресам (например, пингует 8.8.8.8), но когда вы пытаетесь открыть сайт <code>google.com</code> через строку браузера, вы видите ошибку "Невозможно найти доменное имя".</p>
+                        <br>
+                        <p><strong>Задание:</strong> Откройте настройки сети вашего ПК (кликнув по нему на схеме справа). Найдите новое поле "Предпочитаемый DNS-сервер" и запишите туда публичный DNS-адрес от Google: <strong>8.8.8.8</strong>.</p>
+                        <br>
+                        <p>После активации нажмите кнопку "Открыть сайт", чтобы проверить браузер.</p>
+                    </div>
+                </section>
+                <section class="sandbox-section">
+                    <h2>Тренажер</h2>
+                    <div class="network-topology-v2" style="margin-bottom: 30px;">
+                        <div class="nodes-row">
+                            <div class="node pc interactive" id="l9-pc1" onclick="openSettings('l9')" style="width: 140px; border-color: var(--primary); animation: pulseBorder 2s infinite;">
+                                <div class="icon" style="font-size: 40px;">💻</div>
+                                <div class="label" style="font-size: 13px;">Мой ПК</div>
+                                <div class="ip-info" id="l9-pc1-display-ip" style="background-color: rgba(67,97,238,0.08); color: var(--text-main); font-size: 11px;">192.168.1.10<br>DNS: ---</div>
+                            </div>
+                            <div class="link-cable" id="l9-cable1" style="width: 60px;"></div>
+                            <div class="node" style="width: 140px; border-color: #38bdf8;">
+                                <div class="icon" style="font-size: 40px;">🌐</div>
+                                <div class="label" style="font-size: 13px;">Сайт google.com</div>
+                                <div class="ip-info" style="font-size: 11px; background-color: rgba(56, 189, 248, 0.1); color: #38bdf8;">IP: скрыт</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn primary" onclick="checkLesson9()">Открыть сайт в браузере</button>
+                    <div id="result-message-9" class="result-message"></div>
+                </section>
+            </div>
+
+            <!-- УРОК 4.2 -->
+            <div class="lesson-container" id="lesson-10-wrapper" style="display: none;">
+                <section class="theory-section">
+                    <h2>Теория: Команда nslookup</h2>
+                    <div class="video-container">
+                        <video src="видео/4.2.mp4" controls></video>
+                    </div>
+                    <div class="task-description">
+                        <p><strong>Ситуация:</strong> Системному администратору нужно вручную узнать IP-адрес сервера по доменному имени.</p>
+                        <br>
+                        <p><strong>Задание:</strong></p>
+                        <ol style="margin-left: 20px; line-height: 1.6;">
+                            <li>В терминале введите команду <code>nslookup yandex.ru</code> и нажмите Enter.</li>
+                            <li>В полученном выводе найдите список IP-адресов целевого домена (секция Addresses).</li>
+                            <li>Скопируйте/впишите <strong>один любой IPv4-адрес</strong> из полученного списка в поле ниже.</li>
+                        </ol>
+                    </div>
+                </section>
+                <section class="sandbox-section">
+                    <h2>Эмулятор командной строки (cmd)</h2>
+                    <div class="console-simulator" onclick="document.getElementById('console-10-input').focus()" style="min-height: 250px; max-height: 250px;">
+                        <div id="console-10-output">Microsoft Windows [Version 10.0.19045.3086]<br></div>
+                        <div class="console-line" style="margin-top: 10px;">
+                            <span class="prompt">C:\Users\Student&gt;</span>
+                            <input type="text" id="console-10-input" class="console-input" autocomplete="off" spellcheck="false" onkeypress="handleConsole10(event)">
+                        </div>
+                    </div>
+                    
+                    <div class="question-block" style="margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid var(--border); width: 100%; text-align: left;">
+                        <p style="margin-bottom: 10px; font-weight: 600;">Ответьте на вопрос:</p>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Какой IPv4-адрес сервер DNS вернул для yandex.ru?</p>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="l10-answer" placeholder="Пример: 5.255.x.x" style="flex: 1; padding: 10px 15px; border-radius: 4px; border: 1px solid var(--border); background: #ffffff; color: var(--text-main); outline: none;">
+                            <button class="btn primary" onclick="checkLesson10()" style="width: auto;">Отправить ответ</button>
+                        </div>
+                        <div id="result-message-10" class="result-message" style="margin-top: 15px;"></div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- УРОК 5.1 -->
+            <div class="lesson-container" id="lesson-11-wrapper" style="display: none;">
+                <section class="theory-section">
+                    <h2>Теория: Настройка ACL</h2>
+                    <div class="video-container">
+                        <video src="видео/5.1.mp4" controls></video>
+                    </div>
+                    <div class="task-description">
+                        <p><strong>Задание:</strong> Запретите доступ к интернету для устройства с IP-адресом <code>192.168.1.50</code> с помощью ACL (Access Control List).</p>
+                    </div>
+                </section>
+                <section class="sandbox-section">
+                    <h2>Web-интерфейс Роутера</h2>
+                    <div class="router-ui" style="margin-bottom: 20px;">
+                        <div class="router-ui-header">TP-Network Firmware</div>
+                        <div class="router-ui-body">
+                            <div class="router-ui-sidebar">
+                                <ul>
+                                    <li>Status</li>
+                                    <li>Network</li>
+                                    <li class="active">Access Control</li>
+                                </ul>
+                            </div>
+                            <div class="router-ui-content">
+                                <h3>Access Control List (ACL)</h3>
+                                <hr>
+                                <div class="form-group-router">
+                                    <label style="width: 150px;">Target IP:</label>
+                                    <input type="text" id="acl-ip" placeholder="192.168.1.x">
+                                </div>
+                                <div class="form-group-router" style="margin-top: 15px;">
+                                    <label style="width: auto; cursor:pointer;"><input type="radio" id="acl-permit" name="acl-action" checked> Permit (Разрешить)</label>
+                                </div>
+                                <div class="form-group-router">
+                                    <label style="width: auto; cursor:pointer;"><input type="radio" id="acl-deny" name="acl-action"> Deny (Запретить)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn primary" onclick="checkLesson11()">Применить правило</button>
+                    <div id="result-message-11" class="result-message"></div>
+                </section>
+            </div>
+
+            <!-- УРОК 5.2 -->
+            <div class="lesson-container" id="lesson-12-wrapper" style="display: none;">
+                <section class="theory-section">
+                    <h2>Теория: Протокол ARP</h2>
+                    <div class="video-container">
+                        <video src="видео/5.2.mp4" controls></video>
+                    </div>
+                    <div class="task-description">
+                        <p><strong>Задание:</strong> В терминале введите команду <code>arp -a</code>, найдите MAC-адрес устройства с IP <code>192.168.1.1</code> и впишите его в поле ответа.</p>
+                    </div>
+                </section>
+                <section class="sandbox-section">
+                    <h2>Эмулятор командной строки (cmd)</h2>
+                    <div class="console-simulator" onclick="document.getElementById('console-12-input').focus()" style="min-height: 250px; max-height: 250px;">
+                        <div id="console-12-output">Microsoft Windows [Version 10.0.19045.3086]<br></div>
+                        <div class="console-line" style="margin-top: 10px;">
+                            <span class="prompt">C:\Users\Student&gt;</span>
+                            <input type="text" id="console-12-input" class="console-input" autocomplete="off" spellcheck="false" onkeypress="handleConsole12(event)">
+                        </div>
+                    </div>
+                    <div class="question-block" style="margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid var(--border); width: 100%; text-align: left;">
+                        <p style="margin-bottom: 10px; font-weight: 600;">Ответьте на вопрос:</p>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Какой MAC-адрес (физический адрес) соответствует IP 192.168.1.1?</p>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="l12-answer" placeholder="Пример: 00-11-22-33-44-55" style="flex: 1; padding: 10px 15px; border-radius: 4px; border: 1px solid var(--border); background: #ffffff; color: var(--text-main); outline: none;">
+                            <button class="btn primary" onclick="checkLesson12()" style="width: auto;">Отправить ответ</button>
+                        </div>
+                        <div id="result-message-12" class="result-message" style="margin-top: 15px;"></div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- УРОК 5.3 -->
+            <div class="lesson-container" id="lesson-13-wrapper" style="display: none;">
+                <section class="theory-section">
+                    <h2>Теория: Настройка статического NAT</h2>
+                    <div class="video-container">
+                        <video src="видео/5.3.mp4" controls></video>
+                    </div>
+                    <div class="task-description">
+                        <p><strong>Задание:</strong> Пробросьте внутренний локальный IP-адрес веб-сервера <code>192.168.1.100</code> на публичный IP-адрес <code>203.0.113.10</code> для доступа из Интернета.</p>
+                    </div>
+                </section>
+                <section class="sandbox-section">
+                    <h2>Web-интерфейс Роутера</h2>
+                    <div class="router-ui" style="margin-bottom: 20px;">
+                        <div class="router-ui-header">TP-Network Firmware</div>
+                        <div class="router-ui-body">
+                            <div class="router-ui-sidebar">
+                                <ul>
+                                    <li>Status</li>
+                                    <li>Network</li>
+                                    <li class="active">NAT Forwarding</li>
+                                </ul>
+                            </div>
+                            <div class="router-ui-content">
+                                <h3>Static NAT</h3>
+                                <hr>
+                                <div class="form-group-router">
+                                    <label style="width: 150px;">Internal IP:</label>
+                                    <input type="text" id="nat-internal" placeholder="192.168.1.x">
+                                </div>
+                                <div class="form-group-router">
+                                    <label style="width: 150px;">External IP:</label>
+                                    <input type="text" id="nat-external" placeholder="203.0.113.x">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn primary" onclick="checkLesson13()">Сохранить NAT</button>
+                    <div id="result-message-13" class="result-message"></div>
+                </section>
+            </div>
+
+            <!-- УРОК 5.4 -->
+            <div class="lesson-container" id="lesson-14-wrapper" style="display: none;">
+                <section class="theory-section">
+                    <h2>Теория: Утилита tracert</h2>
+                    <div class="video-container">
+                        <video src="видео/5.4.mp4" controls></video>
+                    </div>
+                    <div class="task-description">
+                        <p><strong>Задание:</strong> В терминале введите команду <code>tracert 8.8.8.8</code> и определите IP-адрес первого узла (шлюза), через который проходит пакет.</p>
+                    </div>
+                </section>
+                <section class="sandbox-section">
+                    <h2>Эмулятор командной строки (cmd)</h2>
+                    <div class="console-simulator" onclick="document.getElementById('console-14-input').focus()" style="min-height: 250px; max-height: 250px;">
+                        <div id="console-14-output">Microsoft Windows [Version 10.0.19045.3086]<br></div>
+                        <div class="console-line" style="margin-top: 10px;">
+                            <span class="prompt">C:\Users\Student&gt;</span>
+                            <input type="text" id="console-14-input" class="console-input" autocomplete="off" spellcheck="false" onkeypress="handleConsole14(event)">
+                        </div>
+                    </div>
+                    <div class="question-block" style="margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid var(--border); width: 100%; text-align: left;">
+                        <p style="margin-bottom: 10px; font-weight: 600;">Ответьте на вопрос:</p>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Какой IP-адрес имеет первый маршрутизатор (hop 1) в трассировке?</p>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="l14-answer" placeholder="Пример: 192.168.1.1" style="flex: 1; padding: 10px 15px; border-radius: 4px; border: 1px solid var(--border); background: #ffffff; color: var(--text-main); outline: none;">
+                            <button class="btn primary" onclick="checkLesson14()" style="width: auto;">Отправить ответ</button>
+                        </div>
+                        <div id="result-message-14" class="result-message" style="margin-top: 15px;"></div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- УРОК 5.5 -->
+            <div class="lesson-container" id="lesson-15-wrapper" style="display: none;">
+                <section class="theory-section">
+                    <h2>Теория: Команда netstat</h2>
+                    <div class="video-container">
+                        <video src="видео/5.5.mp4" controls></video>
+                    </div>
+                    <div class="task-description">
+                        <p><strong>Задание:</strong> В терминале введите команду <code>netstat -an</code>, найдите порт, на котором слушает локальный веб-сервер (состояние LISTENING), и впишите его номер.</p>
+                    </div>
+                </section>
+                <section class="sandbox-section">
+                    <h2>Эмулятор командной строки (cmd)</h2>
+                    <div class="console-simulator" onclick="document.getElementById('console-15-input').focus()" style="min-height: 250px; max-height: 250px;">
+                        <div id="console-15-output">Microsoft Windows [Version 10.0.19045.3086]<br></div>
+                        <div class="console-line" style="margin-top: 10px;">
+                            <span class="prompt">C:\Users\Student&gt;</span>
+                            <input type="text" id="console-15-input" class="console-input" autocomplete="off" spellcheck="false" onkeypress="handleConsole15(event)">
+                        </div>
+                    </div>
+                    <div class="question-block" style="margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid var(--border); width: 100%; text-align: left;">
+                        <p style="margin-bottom: 10px; font-weight: 600;">Ответьте на вопрос:</p>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Какой локальный порт открыт для прослушивания (LISTENING) по протоколу TCP?</p>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="l15-answer" placeholder="Пример: 80" style="flex: 1; padding: 10px 15px; border-radius: 4px; border: 1px solid var(--border); background: #ffffff; color: var(--text-main); outline: none;">
+                            <button class="btn primary" onclick="checkLesson15()" style="width: auto;">Отправить ответ</button>
+                        </div>
+                        <div id="result-message-15" class="result-message" style="margin-top: 15px;"></div>
+                    </div>
+                </section>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Модальное окно свойств TCP/IPv4 -->
+    <div class="modal-overlay" id="settings-modal" onclick="closeSettingsOverlay(event)">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Свойства: Протокол интернета версии 4 (TCP/IPv4)</h3>
+                <button class="close-btn" onclick="closeSettings()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="input-form">
+                    <div class="form-group"><label>IP-адрес:</label><input type="text" id="modal-ip" autocomplete="off"></div>
+                    <div class="form-group"><label>Маска подсети:</label><input type="text" id="modal-mask" autocomplete="off"></div>
+                    <div class="form-group"><label>Основной шлюз:</label><input type="text" id="modal-gateway" autocomplete="off"></div>
+                    <div class="form-group" style="margin-top:15px;"><label style="font-weight:600; color:var(--primary);">Предпоч. DNS-сервер:</label><input type="text" id="modal-dns" autocomplete="off" placeholder="Опционально"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary" onclick="closeSettings()">Отмена</button>
+                <button class="btn primary-windows" onclick="saveSettings()">ОК</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="db.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Показываем имя пользователя или редиректим на логин
+            if (typeof DB !== 'undefined') {
+                const user = DB.getCurrentUser();
+                if (!user) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                document.getElementById('sim-user-badge').textContent = 'Пользователь: ' + user.name;
+            }
+
+            // Переключатель WPA2
+            const wpa2Radio = document.getElementById('sec-wpa2');
+            const wpa2Set = document.getElementById('wpa2-settings');
+            const radios = document.getElementsByName('wifi-sec');
+            radios.forEach(r => r.addEventListener('change', () => {
+                if (wpa2Radio.checked) wpa2Set.style.display = 'block';
+                else wpa2Set.style.display = 'none';
+            }));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Диаграмма декомпозиции A0</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#fff; font-family:Arial,sans-serif; display:flex; justify-content:center; padding:20px; }
+.page { width:1300px; border:2px solid #000; background:#fff; }
+
+.header { display:grid; grid-template-columns:1fr 200px 140px 90px 110px; border-bottom:1px solid #000; font-size:11px; }
+.hc { padding:5px 8px; border-right:1px solid #000; }
+.hc:last-child { border-right:none; }
+.hc .lbl { color:#666; font-size:9px; text-transform:uppercase; }
+.hc .val { font-weight:bold; font-size:11px; margin-top:1px; }
+.hc .meta span { display:block; font-size:10px; }
+.status-rows { display:flex; flex-direction:column; }
+.sr { display:flex; align-items:center; gap:5px; padding:2px 4px; font-size:10px; border-bottom:1px solid #ddd; }
+.sr:last-child { border-bottom:none; }
+.sb { width:13px; height:13px; border:1px solid #000; flex-shrink:0; }
+.sb.on { background:#000; }
+.ctx { display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.ctx .top { font-size:9px; color:#666; }
+.ctx .big { font-size:18px; font-weight:bold; }
+
+.footer { display:grid; grid-template-columns:90px 1fr 130px; border-top:1px solid #000; }
+.fc { padding:6px 10px; border-right:1px solid #000; font-size:11px; }
+.fc:last-child { border-right:none; }
+.fc .lbl { color:#666; font-size:9px; text-transform:uppercase; }
+.fc .val { font-weight:bold; font-size:12px; margin-top:2px; }
+.node { display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:bold; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ШАПКА -->
+<div class="header">
+  <div class="hc">
+    <div class="lbl">USED AT:</div>
+    <div class="meta">
+      <span><b>AUTHOR:</b> Иванов Алексей</span>
+      <span><b>PROJECT:</b> ИАК</span>
+      <span><b>NOTES:</b> 1 2 3 4 5 6 7 8 9 10</span>
+    </div>
+  </div>
+  <div class="hc">
+    <div class="meta">
+      <span><b>DATE:</b> 04.05.2026</span>
+      <span><b>REV:</b> &nbsp;06.05.2026</span>
+    </div>
+  </div>
+  <div class="hc status-rows">
+    <div class="sr"><div class="sb on"></div> WORKING</div>
+    <div class="sr"><div class="sb"></div> DRAFT</div>
+    <div class="sr"><div class="sb"></div> RECOMMENDED</div>
+    <div class="sr"><div class="sb"></div> PUBLICATION</div>
+  </div>
+  <div class="hc"><div class="lbl">READER</div><br><div class="lbl">DATE</div></div>
+  <div class="hc ctx"><div class="top">CONTEXT:</div><div class="big">A-0</div></div>
+</div>
+
+<!-- SVG ДИАГРАММА -->
+<svg width="1300" height="700" viewBox="0 0 1300 700" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+<defs>
+  <marker id="ar" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+    <polygon points="0 0,9 3.5,0 7" fill="#000"/>
+  </marker>
+  <pattern id="hatch" patternUnits="userSpaceOnUse" width="5" height="5" patternTransform="rotate(45)">
+    <line x1="0" y1="0" x2="0" y2="5" stroke="#000" stroke-width="1"/>
+  </pattern>
+</defs>
+
+<!-- ═══════ БЛОКИ ═══════ -->
+
+<!-- A1: АНАЛИЗ (210,125) 175×115 -->
+<rect x="210" y="125" width="175" height="115" fill="white" stroke="#000" stroke-width="2"/>
+<rect x="210" y="125" width="22" height="22" fill="url(#hatch)"/>
+<rect x="363" y="218" width="22" height="22" fill="url(#hatch)"/>
+<text x="297" y="174" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#000">Анализ</text>
+<text x="297" y="193" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#000">требований</text>
+<text x="215" y="233" font-family="Arial" font-size="10" fill="#555">A1</text>
+
+<!-- A2: ПРОЕКТИРОВАНИЕ (455,240) 175×115 -->
+<rect x="455" y="240" width="175" height="115" fill="white" stroke="#000" stroke-width="2"/>
+<rect x="455" y="240" width="22" height="22" fill="url(#hatch)"/>
+<rect x="608" y="333" width="22" height="22" fill="url(#hatch)"/>
+<text x="542" y="289" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#000">Проекти-</text>
+<text x="542" y="308" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#000">рование</text>
+<text x="460" y="348" font-family="Arial" font-size="10" fill="#555">A2</text>
+
+<!-- A3: РАЗРАБОТКА (700,355) 175×115 -->
+<rect x="700" y="355" width="175" height="115" fill="white" stroke="#000" stroke-width="2"/>
+<rect x="700" y="355" width="22" height="22" fill="url(#hatch)"/>
+<rect x="853" y="448" width="22" height="22" fill="url(#hatch)"/>
+<text x="787" y="404" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#000">Разработка</text>
+<text x="787" y="423" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#000">сайта</text>
+<text x="705" y="463" font-family="Arial" font-size="10" fill="#555">A3</text>
+
+<!-- A4: ТЕСТИРОВАНИЕ (950,465) 175×115 -->
+<rect x="950" y="465" width="175" height="115" fill="white" stroke="#000" stroke-width="2"/>
+<rect x="950" y="465" width="22" height="22" fill="url(#hatch)"/>
+<rect x="1103" y="558" width="22" height="22" fill="url(#hatch)"/>
+<text x="1037" y="510" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#000">Тестирование</text>
+<text x="1037" y="529" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#000">и публикация</text>
+<text x="955" y="573" font-family="Arial" font-size="10" fill="#555">A4</text>
+
+<!-- ═══════ УПРАВЛЕНИЕ СВЕРХУ ═══════ -->
+
+<!-- Горизонтальная шина управления y=52 -->
+<line x1="285" y1="52" x2="1015" y2="52" stroke="#000" stroke-width="1.5"/>
+
+<!-- Индивидуальное задание → A1, вертикаль x=285 -->
+<line x1="285" y1="52" x2="285" y2="125" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<!-- Метка выше шины -->
+<text x="285" y="16" text-anchor="middle" font-family="Arial" font-size="12" fill="#000">Индивидуальное</text>
+<text x="285" y="32" text-anchor="middle" font-family="Arial" font-size="12" fill="#000">задание</text>
+<!-- Засечка на шине -->
+<line x1="285" y1="48" x2="285" y2="56" stroke="#000" stroke-width="2"/>
+
+<!-- Правила и процедуры — вертикали к A2, A3, A4 -->
+<line x1="520" y1="52" x2="520" y2="240" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="755" y1="52" x2="755" y2="355" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="1015" y1="52" x2="1015" y2="465" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<!-- Метка Правила и процедуры над шиной справа -->
+<text x="760" y="16" text-anchor="middle" font-family="Arial" font-size="12" fill="#000">Правила</text>
+<text x="760" y="32" text-anchor="middle" font-family="Arial" font-size="12" fill="#000">и процедуры</text>
+
+<!-- ═══════ ВХОДЫ СЛЕВА ═══════ -->
+
+<!-- Входная вертикальная ось x=32 -->
+<!-- Вход 1: Знания и умения → A1 (y=155) -->
+<line x1="32" y1="155" x2="210" y2="155" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<!-- Метка ВЫШЕ линии y=155 -->
+<text x="8"  y="138" font-family="Arial" font-size="12" fill="#000">Знания</text>
+<text x="8"  y="152" font-family="Arial" font-size="12" fill="#000">и умения</text>
+
+<!-- Вход 2: Ввод информации → A1 (y=182) + ветка → A2 -->
+<line x1="32" y1="182" x2="210" y2="182" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<!-- ветка вниз x=32 y=182→300, затем вправо до A2 y=300 -->
+<polyline points="32,182 32,300 455,300" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<!-- Метка ВЫШЕ линии y=182 -->
+<text x="8"  y="167" font-family="Arial" font-size="12" fill="#000">Ввод</text>
+<text x="8"  y="181" font-family="Arial" font-size="12" fill="#000">информации</text>
+
+<!-- Вход 3: База данных → A2 (y=335) + ветка → A3 -->
+<line x1="32" y1="335" x2="455" y2="335" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<!-- ветка x=55 y=335→415 → A3 -->
+<polyline points="55,335 55,415 700,415" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<!-- Метка ВЫШЕ линии y=335 -->
+<text x="8"  y="318" font-family="Arial" font-size="12" fill="#000">База</text>
+<text x="8"  y="332" font-family="Arial" font-size="12" fill="#000">данных</text>
+
+<!-- ═══════ СВЯЗИ МЕЖДУ БЛОКАМИ ═══════ -->
+
+<!-- A1 → A2: из правой грани A1 (x=385,y=168) → шаг вправо → вниз → вход A2 -->
+<polyline points="385,168 425,168 425,275 455,275" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<!-- Метка ВЫШЕ горизонтального отрезка (y=168): размещаем на y=153 между x=385 и x=425 -->
+<text x="390" y="152" font-family="Arial" font-size="11" fill="#000">Техническое</text>
+<text x="390" y="165" font-family="Arial" font-size="11" fill="#000">задание</text>
+
+<!-- A2 → A3: из правой грани A2 (x=630,y=283) → шаг → вход A3 -->
+<polyline points="630,283 668,283 668,390 700,390" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<!-- Метка выше горизонт. отрезка (y=283) -->
+<text x="632" y="267" font-family="Arial" font-size="11" fill="#000">Макет</text>
+<text x="632" y="280" font-family="Arial" font-size="11" fill="#000">и структура</text>
+
+<!-- A3 → A4: из правой грани A3 (x=875,y=398) → шаг → вход A4 -->
+<polyline points="875,398 913,398 913,500 950,500" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<!-- Метка выше горизонт. отрезка (y=398) -->
+<text x="877" y="382" font-family="Arial" font-size="11" fill="#000">Разработанный</text>
+<text x="877" y="395" font-family="Arial" font-size="11" fill="#000">продукт</text>
+
+<!-- ═══════ ВЫХОД СПРАВА ═══════ -->
+<line x1="1125" y1="515" x2="1240" y2="515" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="1245" y="507" font-family="Arial" font-size="12" fill="#000">Готовый</text>
+<text x="1245" y="521" font-family="Arial" font-size="12" fill="#000">веб-сайт</text>
+
+<!-- ═══════ МЕХАНИЗМЫ СНИЗУ ═══════ -->
+
+<!-- Горизонтальная шина механизмов y=636 -->
+<line x1="297" y1="636" x2="1037" y2="636" stroke="#000" stroke-width="1.5"/>
+
+<!-- Студент → A1 bottom (x=297) -->
+<line x1="297" y1="636" x2="297" y2="240" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<!-- Метка НИЖЕ шины -->
+<text x="297" y="654" text-anchor="middle" font-family="Arial" font-size="12" fill="#000">Студент</text>
+<text x="297" y="669" text-anchor="middle" font-family="Arial" font-size="12" fill="#000">(разработчик)</text>
+
+<!-- Языки программирования → A3 bottom (x=787) -->
+<line x1="787" y1="636" x2="787" y2="470" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="787" y="654" text-anchor="middle" font-family="Arial" font-size="12" fill="#000">Языки</text>
+<text x="787" y="669" text-anchor="middle" font-family="Arial" font-size="12" fill="#000">программирования</text>
+
+<!-- Руководители → A4 bottom (x=1037) -->
+<line x1="1037" y1="636" x2="1037" y2="580" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="1037" y="654" text-anchor="middle" font-family="Arial" font-size="12" fill="#000">Руководители</text>
+<text x="1037" y="669" text-anchor="middle" font-family="Arial" font-size="12" fill="#000">практики</text>
+
+<!-- Засечки на шине -->
+<line x1="297"  y1="632" x2="297"  y2="640" stroke="#000" stroke-width="2"/>
+<line x1="787"  y1="632" x2="787"  y2="640" stroke="#000" stroke-width="2"/>
+<line x1="1037" y1="632" x2="1037" y2="640" stroke="#000" stroke-width="2"/>
+
+</svg>
+
+<!-- ПОДВАЛ -->
+<div class="footer">
+  <div class="fc node">A0</div>
+  <div class="fc">
+    <div class="lbl">TITLE</div>
+    <div class="val">Разработка сайта для Ивацевичского аграрного колледжа</div>
+  </div>
+  <div class="fc">
+    <div class="lbl">NUMBER</div>
+    <div class="val"></div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

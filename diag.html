@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>IDEF0 — NetSim</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#fff; font-family:Arial,sans-serif; display:flex; justify-content:center; padding:20px; }
+.page { width:1100px; border:2px solid #000; background:#fff; }
+
+.header { display:grid; grid-template-columns:1fr 200px 140px 90px 110px; border-bottom:1px solid #000; font-size:11px; }
+.hc { padding:5px 8px; border-right:1px solid #000; }
+.hc:last-child { border-right:none; }
+.hc .lbl { color:#666; font-size:9px; text-transform:uppercase; }
+.hc .val { font-weight:bold; font-size:11px; margin-top:1px; }
+.hc .meta span { display:block; font-size:10px; }
+.status-rows { display:flex; flex-direction:column; }
+.sr { display:flex; align-items:center; gap:5px; padding:2px 4px; font-size:10px; border-bottom:1px solid #ddd; }
+.sr:last-child { border-bottom:none; }
+.sb { width:13px; height:13px; border:1px solid #000; flex-shrink:0; }
+.sb.on { background:#000; }
+.ctx { display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.ctx .top { font-size:9px; color:#666; }
+.ctx .big { font-size:18px; font-weight:bold; }
+
+.footer { display:grid; grid-template-columns:90px 1fr 130px; border-top:1px solid #000; }
+.fc { padding:6px 10px; border-right:1px solid #000; font-size:11px; }
+.fc:last-child { border-right:none; }
+.fc .lbl { color:#666; font-size:9px; text-transform:uppercase; }
+.fc .val { font-weight:bold; font-size:12px; margin-top:2px; }
+.node { display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:bold; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ШАПКА -->
+<div class="header">
+  <div class="hc">
+    <div class="lbl">USED AT:</div>
+    <div class="meta">
+      <span><b>AUTHOR:</b> Иванов Алексей</span>
+      <span><b>PROJECT:</b> NetSim</span>
+      <span><b>NOTES:</b> 1 2 3 4 5 6 7 8 9 10</span>
+    </div>
+  </div>
+  <div class="hc">
+    <div class="meta">
+      <span><b>DATE:</b> 27.05.2026</span>
+      <span><b>REV:</b> 27.05.2026</span>
+    </div>
+  </div>
+  <div class="hc status-rows">
+    <div class="sr"><div class="sb on"></div> WORKING</div>
+    <div class="sr"><div class="sb"></div> DRAFT</div>
+    <div class="sr"><div class="sb"></div> RECOMMENDED</div>
+    <div class="sr"><div class="sb"></div> PUBLICATION</div>
+  </div>
+  <div class="hc"><div class="lbl">READER</div><br><div class="lbl">DATE</div></div>
+  <div class="hc ctx"><div class="top">CONTEXT:</div><div class="big">A-0</div></div>
+</div>
+
+<!-- SVG ДИАГРАММА IDEF0 -->
+<svg width="1100" height="680" viewBox="0 0 1100 680" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+<defs>
+  <marker id="ar" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+    <polygon points="0 0,9 3.5,0 7" fill="#000"/>
+  </marker>
+</defs>
+
+<!-- ============================================ -->
+<!-- ЦЕНТРАЛЬНЫЙ БЛОК -->
+<!-- ============================================ -->
+<rect x="370" y="280" width="360" height="120" fill="white" stroke="#000" stroke-width="2"/>
+<text x="550" y="325" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold">NetSim</text>
+<text x="550" y="350" text-anchor="middle" font-family="Arial" font-size="12">Информационно-поисковая система</text>
+<text x="550" y="368" text-anchor="middle" font-family="Arial" font-size="12">по настройке компьютерных сетей</text>
+<text x="550" y="388" text-anchor="middle" font-family="Arial" font-size="10" fill="#555">Бизнес-процесс</text>
+
+<!-- ============================================ -->
+<!-- УПРАВЛЕНИЕ (СВЕРХУ) — ПОДНЯТО ВВЕРХ -->
+<!-- ============================================ -->
+
+<!-- Стрелка 1: Роли пользователей -->
+<line x1="370" y1="140" x2="370" y2="280" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="370" y="115" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold">Роли</text>
+<text x="370" y="130" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold">пользователей</text>
+
+<!-- Стрелка 2: Методические стандарты -->
+<line x1="550" y1="140" x2="550" y2="280" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="550" y="115" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold">Методические</text>
+<text x="550" y="130" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold">стандарты</text>
+
+<!-- Стрелка 3: Политика безопасности -->
+<line x1="730" y1="140" x2="730" y2="280" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="730" y="115" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold">Политика</text>
+<text x="730" y="130" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold">безопасности</text>
+
+<!-- ============================================ -->
+<!-- ВХОД (СЛЕВА) -->
+<!-- ============================================ -->
+
+<!-- Стрелка 1: Регистрационные данные -->
+<line x1="120" y1="305" x2="370" y2="305" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="80" y="299" text-anchor="middle" font-family="Arial" font-size="10">Регистрационные</text>
+<text x="80" y="312" text-anchor="middle" font-family="Arial" font-size="10">данные</text>
+
+<!-- Стрелка 2: Учётные данные -->
+<line x1="120" y1="345" x2="370" y2="345" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="80" y="339" text-anchor="middle" font-family="Arial" font-size="10">Учётные</text>
+<text x="80" y="352" text-anchor="middle" font-family="Arial" font-size="10">данные</text>
+
+<!-- ============================================ -->
+<!-- ВЫХОД (СПРАВА) -->
+<!-- ============================================ -->
+
+<!-- Стрелка 1: Пройденные уроки -->
+<line x1="730" y1="315" x2="980" y2="315" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="990" y="309" font-family="Arial" font-size="10">Пройденные</text>
+<text x="990" y="322" font-family="Arial" font-size="10">уроки</text>
+
+<!-- Стрелка 2: Отчёты -->
+<line x1="730" y1="355" x2="980" y2="355" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="990" y="349" font-family="Arial" font-size="10">Отчёты</text>
+<text x="990" y="362" font-family="Arial" font-size="10">(Excel/JSON/PDF)</text>
+
+<!-- ============================================ -->
+<!-- МЕХАНИЗМЫ (СНИЗУ) — ОПУЩЕНО ВНИЗ -->
+<!-- ============================================ -->
+
+<!-- Стрелка 1: Студент -->
+<line x1="370" y1="530" x2="370" y2="400" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="370" y="552" text-anchor="middle" font-family="Arial" font-size="10">Студент</text>
+<text x="370" y="566" text-anchor="middle" font-family="Arial" font-size="10">(пользователь)</text>
+
+<!-- Стрелка 2: Веб-браузер -->
+<line x1="550" y1="530" x2="550" y2="400" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="550" y="552" text-anchor="middle" font-family="Arial" font-size="10">Веб-браузер,</text>
+<text x="550" y="566" text-anchor="middle" font-family="Arial" font-size="10">HTML/CSS/JS</text>
+
+<!-- Стрелка 3: Администратор -->
+<line x1="730" y1="530" x2="730" y2="400" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="730" y="552" text-anchor="middle" font-family="Arial" font-size="10">Администратор</text>
+<text x="730" y="566" text-anchor="middle" font-family="Arial" font-size="10">системы</text>
+
+</svg>
+
+<!-- ПОДВАЛ -->
+<div class="footer">
+  <div class="fc node">A0</div>
+  <div class="fc">
+    <div class="lbl">TITLE</div>
+    <div class="val">Информационно-поисковая система NetSim — настройка компьютерных сетей</div>
+  </div>
+  <div class="fc">
+    <div class="lbl">NUMBER</div>
+    <div class="val"></div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

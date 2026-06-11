@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetSim — Панель Администратора</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SheetJS для работы с Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="db.js"></script>
+</head>
+<body>
+<div class="app-container admin-theme">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar admin-sidebar">
+        <div class="logo"><span class="icon">🛡️</span> NetAdmin</div>
+        <nav class="course-nav">
+            <h3>Управление системой</h3>
+            <ul>
+                <li id="nav-a1" class="active" onclick="showSection(1)">📊 Дашборд</li>
+                <li id="nav-a2" onclick="showSection(2)">📚 База знаний</li>
+                <li id="nav-a3" onclick="showSection(3)">👥 Пользователи и Тикеты</li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="index.html" class="back-link">← Вернуться к выбору роли</a>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content">
+        <header class="top-bar admin-topbar">
+            <h1 id="admin-title">Общий дашборд</h1>
+            <div class="user-profile admin-profile">Администратор: admin</div>
+        </header>
+
+        <div class="lesson-container flex-col" style="overflow-y:auto; gap:20px;">
+
+            <!-- ===== SECTION 1: DASHBOARD ===== -->
+            <div id="section-1">
+                <div class="admin-widgets-grid">
+                    <div class="admin-widget">
+                        <div class="widget-title">Статей в базе знаний</div>
+                        <div class="widget-value text-success" id="w-articles">—</div>
+                    </div>
+                    <div class="admin-widget">
+                        <div class="widget-title">Пользователей</div>
+                        <div class="widget-value" style="color:#4361ee" id="w-users">—</div>
+                    </div>
+                    <div class="admin-widget">
+                        <div class="widget-title">Открытых тикетов</div>
+                        <div class="widget-value text-danger" id="w-tickets">—</div>
+                    </div>
+                </div>
+                <div class="admin-panel-section" style="margin-top:24px;">
+                    <div class="section-toolbar"><h2>Последние статьи базы знаний</h2></div>
+                    <table class="admin-table">
+                        <thead><tr><th>Тема</th><th>Категория</th><th>Описание</th><th>Дата</th></tr></thead>
+                        <tbody id="dash-articles-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== SECTION 2: KNOWLEDGE BASE ===== -->
+            <div id="section-2" style="display:none;">
+                <div class="admin-panel-section">
+                    <div class="section-toolbar">
+                        <h2>📚 База знаний по сетям</h2>
+                        <div class="toolbar-actions">
+                            <button class="btn-adm btn-add" onclick="openModal('modal-article')">+ Добавить статью</button>
+                            <button class="btn-adm btn-xls-exp" onclick="exportArticles()">📥 Экспорт Excel</button>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;">
+                        <button class="btn-adm" onclick="filterArticles('all')">Все</button>
+                        <button class="btn-adm" onclick="filterArticles('Маршрутизация')">Маршрутизация</button>
+                        <button class="btn-adm" onclick="filterArticles('Коммутация')">Коммутация</button>
+                        <button class="btn-adm" onclick="filterArticles('DHCP')">DHCP</button>
+                        <button class="btn-adm" onclick="filterArticles('DNS')">DNS</button>
+                        <button class="btn-adm" onclick="filterArticles('Безопасность')">Безопасность</button>
+                        <button class="btn-adm" onclick="filterArticles('VPN')">VPN</button>
+                        <button class="btn-adm" onclick="filterArticles('IP-адресация')">IP-адресация</button>
+                        <button class="btn-adm" onclick="filterArticles('Мониторинг')">Мониторинг</button>
+                    </div>
+                    <table class="admin-table">
+                        <thead><tr><th>ID</th><th>Тема статьи</th><th>Категория</th><th>Описание</th><th>Дата</th><th>Действия</th></tr></thead>
+                        <tbody id="articles-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== SECTION 3: USERS & TICKETS ===== -->
+            <div id="section-3" style="display:none;">
+                <!-- Users -->
+                <div class="admin-panel-section">
+                    <div class="section-toolbar">
+                        <h2>👥 Пользователи</h2>
+                        <div class="toolbar-actions">
+                            <button class="btn-adm btn-xls-exp" onclick="exportUsers()">📥 Экспорт Excel</button>
+                            <label class="btn-adm btn-xls-imp">📤 Импорт Excel<input type="file" accept=".xlsx,.xls" onchange="importUsers(event)" style="display:none"></label>
+                        </div>
+                    </div>
+                    <table class="admin-table">
+                        <thead><tr><th>ID</th><th>Имя</th><th>Логин</th><th>Уроков</th><th>Последний урок</th><th>Ошибок</th><th>Регистрация</th><th>Действие</th></tr></thead>
+                        <tbody id="users-body"></tbody>
+                    </table>
+                </div>
+                <!-- Tickets -->
+                <div class="admin-panel-section" style="margin-top:24px;">
+                    <div class="section-toolbar">
+                        <h2>🎫 Тикеты поддержки</h2>
+                        <div class="toolbar-actions">
+                            <button class="btn-adm btn-add" onclick="openModal('modal-ticket')">+ Новый тикет</button>
+                            <button class="btn-adm btn-xls-exp" onclick="exportTickets()">📥 Экспорт Excel</button>
+                        </div>
+                    </div>
+                    <table class="admin-table">
+                        <thead><tr><th>ID</th><th>Пользователь</th><th>Проблема</th><th>Статус</th><th>Дата</th><th>Действие</th></tr></thead>
+                        <tbody id="tickets-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div><!-- lesson-container -->
+    </main>
+</div><!-- app-container -->
+
+<!-- MODAL: Добавить статью -->
+<div class="modal-overlay" id="modal-article" onclick="if(event.target===this)closeModal('modal-article')">
+    <div class="modal adm-modal">
+        <div class="modal-header">
+            <h3>Добавить статью в базу знаний</h3>
+            <button class="close-btn" onclick="closeModal('modal-article')">&times;</button>
+        </div>
+        <div class="modal-body adm-modal-body">
+            <div class="adm-field"><label>Тема статьи</label><input id="a-title" class="adm-input" placeholder="Например: Настройка OSPF"></div>
+            <div class="adm-field"><label>Категория</label>
+                <select id="a-category" class="adm-input">
+                    <option>Маршрутизация</option><option>Коммутация</option><option>DHCP</option>
+                    <option>DNS</option><option>Безопасность</option><option>VPN</option>
+                    <option>IP-адресация</option><option>Мониторинг</option>
+                </select>
+            </div>
+            <div class="adm-field"><label>Описание</label><input id="a-desc" class="adm-input" placeholder="Краткое описание статьи"></div>
+            <div class="adm-field"><label>Содержание</label><textarea id="a-content" class="adm-input" rows="4" placeholder="Подробное содержание..."></textarea></div>
+            <div id="a-err" class="adm-err" style="display:none"></div>
+        </div>
+        <div class="adm-modal-footer">
+            <button class="btn-adm" onclick="closeModal('modal-article')">Отмена</button>
+            <button class="btn-adm btn-save-dhcp" onclick="saveArticle()">Сохранить</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: Редактировать статью -->
+<div class="modal-overlay" id="modal-edit-article" onclick="if(event.target===this)closeModal('modal-edit-article')">
+    <div class="modal adm-modal" style="max-width:580px;">
+        <div class="modal-header">
+            <h3>✏️ Редактировать статью</h3>
+            <button class="close-btn" onclick="closeModal('modal-edit-article')">×</button>
+        </div>
+        <div class="modal-body adm-modal-body">
+            <input type="hidden" id="ea-id">
+            <div class="adm-field"><label>Тема статьи</label><input id="ea-title" class="adm-input" placeholder="Тема"></div>
+            <div class="adm-field"><label>Категория</label>
+                <select id="ea-category" class="adm-input">
+                    <option>Маршрутизация</option><option>Коммутация</option><option>DHCP</option>
+                    <option>DNS</option><option>Безопасность</option><option>VPN</option>
+                    <option>IP-адресация</option><option>Мониторинг</option>
+                </select>
+            </div>
+            <div class="adm-field"><label>Описание</label><input id="ea-desc" class="adm-input" placeholder="Краткое описание"></div>
+            <div class="adm-field"><label>Содержание</label><textarea id="ea-content" class="adm-input" rows="5" placeholder="Подробное содержание..."></textarea></div>
+            <div id="ea-err" class="adm-err" style="display:none"></div>
+        </div>
+        <div class="adm-modal-footer">
+            <button class="btn-adm" onclick="closeModal('modal-edit-article')">Отмена</button>
+            <button class="btn-adm btn-save-dhcp" onclick="updateArticle()">💾 Сохранить изменения</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: Новый тикет -->
+<div class="modal-overlay" id="modal-ticket" onclick="if(event.target===this)closeModal('modal-ticket')">
+    <div class="modal adm-modal">
+        <div class="modal-header">
+            <h3>Создать тикет</h3>
+            <button class="close-btn" onclick="closeModal('modal-ticket')">&times;</button>
+        </div>
+        <div class="modal-body adm-modal-body">
+            <div class="adm-field"><label>Пользователь</label><input id="t-user" class="adm-input" placeholder="Имя или логин"></div>
+            <div class="adm-field"><label>Проблема</label><input id="t-problem" class="adm-input" placeholder="Описание проблемы"></div>
+            <div id="t-err" class="adm-err" style="display:none"></div>
+        </div>
+        <div class="adm-modal-footer">
+            <button class="btn-adm" onclick="closeModal('modal-ticket')">Отмена</button>
+            <button class="btn-adm btn-save-dhcp" onclick="saveTicket()">Создать</button>
+        </div>
+    </div>
+</div>
+<!-- MODAL: Решить тикет -->
+<div class="modal-overlay" id="modal-resolve-ticket" onclick="if(event.target===this)closeModal('modal-resolve-ticket')">
+    <div class="modal adm-modal" style="max-width:520px;">
+        <div class="modal-header">
+            <h3 id="resolve-ticket-title">Решить тикет</h3>
+            <button class="close-btn" onclick="closeModal('modal-resolve-ticket')">&times;</button>
+        </div>
+        <div class="modal-body adm-modal-body">
+            <div class="adm-field"><label>Пользователь</label><div id="resolve-ticket-user" class="adm-readonly"></div></div>
+            <div class="adm-field"><label>Проблема</label><div id="resolve-ticket-problem" class="adm-readonly"></div></div>
+            <div class="adm-field" id="resolve-field-wrap">
+                <label>Что сделано</label>
+                <textarea id="resolve-ticket-note" class="adm-input" rows="4" placeholder="Опишите, как была решена проблема…"></textarea>
+            </div>
+            <div class="adm-field" id="resolve-view-wrap" style="display:none;">
+                <label>Решение</label>
+                <pre id="resolve-ticket-view" class="adm-readonly-block"></pre>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:6px;" id="resolve-ticket-date"></div>
+            </div>
+            <div id="resolve-err" class="adm-err" style="display:none"></div>
+        </div>
+        <div class="adm-modal-footer" id="resolve-footer-actions">
+            <button class="btn-adm" onclick="closeModal('modal-resolve-ticket')">Отмена</button>
+            <button class="btn-adm btn-save-dhcp" onclick="confirmResolveTicket()">Отметить как решённый</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: Просмотр статьи -->
+<div class="modal-overlay" id="modal-view-article" onclick="if(event.target===this)closeModal('modal-view-article')">
+    <div class="modal adm-modal" style="max-width:700px;">
+        <div class="modal-header">
+            <h3 id="view-article-title">Статья</h3>
+            <button class="close-btn" onclick="closeModal('modal-view-article')">&times;</button>
+        </div>
+        <div class="modal-body adm-modal-body" style="max-height:60vh;overflow-y:auto;">
+            <div style="margin-bottom:10px;"><span class="adm-badge badge-online" id="view-article-cat"></span></div>
+            <p style="color:var(--text-muted);font-size:14px;margin-bottom:12px;" id="view-article-desc"></p>
+            <pre id="view-article-content" style="white-space:pre-wrap;font-family:inherit;font-size:14px;line-height:1.7;color:#fff;background:var(--bg-darker,#0d1117);padding:16px;border-radius:8px;"></pre>
+        </div>
+        <div class="adm-modal-footer">
+            <button class="btn-adm" onclick="closeModal('modal-view-article')">Закрыть</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ── Навигация по секциям ──────────────────────────────────────
+const TITLES = ['', 'Общий дашборд', 'База знаний', 'Пользователи и Тикеты'];
+function showSection(n) {
+    for (let i = 1; i <= 3; i++) {
+        document.getElementById('section-' + i).style.display = i === n ? '' : 'none';
+        document.getElementById('nav-a' + i).classList.toggle('active', i === n);
+    }
+    document.getElementById('admin-title').innerText = TITLES[n];
+    if (n === 1) renderDashboard();
+    if (n === 2) renderArticles();
+    if (n === 3) renderUsers(), renderTickets();
+}
+
+// ── Утилиты ──────────────────────────────────────────────────
+function openModal(id)  { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+function badge(status) {
+    const ok = status === 'online' || status === 'closed';
+    const label = status === 'online' ? 'Online' : status === 'offline' ? 'Offline' : status === 'open' ? 'Открыт' : 'Решён';
+    const cls   = status === 'online' ? 'badge-online' : status === 'offline' ? 'badge-offline' : status === 'open' ? 'badge-open' : 'badge-closed';
+    return `<span class="adm-badge ${cls}">${label}</span>`;
+}
+function progressBar(done) {
+    const pct = (done / 15) * 100;
+    return `<div class="progress-wrap"><div class="progress-bar" style="width:${pct}%"></div><span>${done}/15</span></div>`;
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────
+function renderDashboard() {
+    const articles = getArticles();
+    const users    = DB.getUsers();
+    const tickets  = DB.getTickets();
+    document.getElementById('w-articles').innerText = articles.length;
+    document.getElementById('w-users').innerText    = users.length;
+    document.getElementById('w-tickets').innerText  = tickets.filter(t => t.status === 'open').length;
+
+    const tbody = document.getElementById('dash-articles-body');
+    if (!articles.length) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);">Нет статей в базе знаний</td></tr>'; return; }
+    tbody.innerHTML = articles.slice(-5).reverse().map(a => `
+        <tr>
+            <td><strong>${a.title}</strong></td>
+            <td><span class="adm-badge badge-online">${a.category}</span></td>
+            <td style="font-size:13px">${a.description}</td>
+            <td>${a.date}</td>
+        </tr>`).join('');
+}
+
+// ── ARTICLES (База знаний) ────────────────────────────────────
+function getArticles() {
+    try { return JSON.parse(localStorage.getItem('netsim_articles')) || defaultArticles(); } catch(e) { return defaultArticles(); }
+}
+function saveArticlesLocal(arr) { localStorage.setItem('netsim_articles', JSON.stringify(arr)); }
+function defaultArticles() {
+    return [
+        { id:1, title:'Настройка статической маршрутизации', category:'Маршрутизация', description:'Пошаговая инструкция по настройке статических маршрутов на маршрутизаторе', date:'01.05.2026',
+          content:'Статическая маршрутизация — это метод, при котором администратор вручную задаёт маршруты в таблице маршрутизации.\n\nШаги настройки:\n1. Определите целевую сеть и маску подсети (например, 192.168.2.0/24)\n2. Определите адрес следующего хопа (next-hop) или выходной интерфейс\n3. На маршрутизаторе Cisco введите команду:\n   ip route 192.168.2.0 255.255.255.0 192.168.1.1\n4. Проверьте маршрут командой: show ip route\n5. Протестируйте связь командой ping\n\nПреимущества: низкая нагрузка на процессор, безопасность, предсказуемость.\nНедостатки: не масштабируется, требует ручного обновления.' },
+        { id:2, title:'Настройка DHCP-сервера', category:'DHCP', description:'Как настроить автоматическую выдачу IP-адресов в локальной сети', date:'03.05.2026',
+          content:'DHCP (Dynamic Host Configuration Protocol) автоматически назначает IP-адреса устройствам в сети.\n\nНастройка на маршрутизаторе Cisco:\n1. Создайте пул адресов:\n   ip dhcp pool LAN_POOL\n   network 192.168.1.0 255.255.255.0\n   default-router 192.168.1.1\n   dns-server 8.8.8.8\n   lease 1\n\n2. Исключите статические адреса:\n   ip dhcp excluded-address 192.168.1.1 192.168.1.10\n\n3. Проверьте выданные адреса:\n   show ip dhcp binding\n\nПроцесс DORA: Discover → Offer → Request → Acknowledge.' },
+        { id:3, title:'Основы IP-адресации и подсетей', category:'IP-адресация', description:'Разбор классов IP-адресов, масок подсети и CIDR-нотации', date:'05.05.2026',
+          content:'IP-адрес состоит из 4 октетов (32 бита) и делится на сетевую и хостовую части.\n\nКлассы IP-адресов:\n• Класс A: 1.0.0.0 – 126.255.255.255 (маска /8)\n• Класс B: 128.0.0.0 – 191.255.255.255 (маска /16)\n• Класс C: 192.0.0.0 – 223.255.255.255 (маска /24)\n\nЧастные диапазоны (RFC 1918):\n• 10.0.0.0/8\n• 172.16.0.0/12\n• 192.168.0.0/16\n\nПример разбиения сети 192.168.1.0/24 на 4 подсети:\n• 192.168.1.0/26 (хосты: .1–.62)\n• 192.168.1.64/26 (хосты: .65–.126)\n• 192.168.1.128/26 (хосты: .129–.190)\n• 192.168.1.192/26 (хосты: .193–.254)' },
+        { id:4, title:'Настройка DNS-сервера', category:'DNS', description:'Конфигурация прямой и обратной зоны DNS', date:'07.05.2026',
+          content:'DNS (Domain Name System) преобразует доменные имена в IP-адреса.\n\nОсновные типы записей:\n• A — соответствие имени и IPv4-адреса\n• AAAA — соответствие имени и IPv6-адреса\n• CNAME — псевдоним для другого имени\n• MX — почтовый сервер домена\n• NS — авторитетный DNS-сервер\n• PTR — обратная запись (IP → имя)\n\nНастройка DNS на Cisco:\n  ip name-server 8.8.8.8\n  ip domain-lookup\n\nДиагностика:\n  nslookup example.com\n  dig example.com\n  ipconfig /displaydns' },
+        { id:5, title:'Безопасность Wi-Fi: WPA2 и WPA3', category:'Безопасность', description:'Сравнение протоколов безопасности беспроводных сетей', date:'10.05.2026',
+          content:'Протоколы безопасности Wi-Fi:\n\nWEP (устарел) — легко взламывается, не рекомендуется.\n\nWPA2 (рекомендуется):\n• Шифрование AES-CCMP\n• Режимы: Personal (PSK) и Enterprise (802.1X)\n• Длина ключа: минимум 8 символов\n• Уязвим к атаке KRACK\n\nWPA3 (новейший):\n• SAE (Simultaneous Authentication of Equals) вместо PSK\n• Защита от офлайн-атак перебором\n• Forward Secrecy — компрометация ключа не раскроет прошлый трафик\n• 192-битное шифрование в Enterprise режиме\n\nРекомендации:\n1. Используйте WPA3, если оборудование поддерживает\n2. Пароль не менее 12 символов\n3. Отключите WPS\n4. Скрыть SSID (опционально)' },
+        { id:6, title:'Настройка VLAN на коммутаторе', category:'Коммутация', description:'Создание и настройка виртуальных локальных сетей', date:'12.05.2026',
+          content:'VLAN (Virtual LAN) разделяет коммутатор на логические сегменты.\n\nСоздание VLAN на Cisco:\n  vlan 10\n  name OFFICE\n  vlan 20\n  name SERVERS\n\nНазначение порта в VLAN:\n  interface fa0/1\n  switchport mode access\n  switchport access vlan 10\n\nНастройка транкового порта:\n  interface fa0/24\n  switchport mode trunk\n  switchport trunk allowed vlan 10,20\n\nМежVLAN маршрутизация (Router-on-a-Stick):\n  interface fa0/0.10\n  encapsulation dot1Q 10\n  ip address 192.168.10.1 255.255.255.0' },
+        { id:7, title:'Мониторинг сети с помощью SNMP', category:'Мониторинг', description:'Использование протокола SNMP для мониторинга сетевых устройств', date:'14.05.2026',
+          content:'SNMP (Simple Network Management Protocol) позволяет собирать данные с устройств.\n\nВерсии:\n• SNMPv1 — базовый, без шифрования\n• SNMPv2c — улучшенный, community strings\n• SNMPv3 — аутентификация и шифрование\n\nКомпоненты:\n• Manager (NMS) — сервер мониторинга\n• Agent — процесс на устройстве\n• MIB — база данных объектов\n\nНастройка на Cisco:\n  snmp-server community public RO\n  snmp-server community private RW\n  snmp-server host 192.168.1.100 public\n\nОсновные OID:\n• 1.3.6.1.2.1.1.1 — описание системы\n• 1.3.6.1.2.1.2.2 — интерфейсы\n• 1.3.6.1.2.1.1.3 — uptime' },
+        { id:8, title:'Настройка VPN-туннеля', category:'VPN', description:'Создание защищённого VPN-соединения между двумя офисами', date:'16.05.2026',
+          content:'VPN (Virtual Private Network) создаёт зашифрованный туннель через публичную сеть.\n\nТипы VPN:\n• Site-to-Site — соединение двух офисов\n• Remote Access — подключение удалённого сотрудника\n• SSL VPN — через браузер\n\nIPSec Site-to-Site (фазы IKE):\n\nФаза 1 (ISAKMP):\n  crypto isakmp policy 10\n  encryption aes 256\n  hash sha256\n  authentication pre-share\n  group 14\n  crypto isakmp key MySecret address 203.0.113.1\n\nФаза 2 (IPSec):\n  crypto ipsec transform-set MYSET esp-aes 256 esp-sha256-hmac\n  crypto map MYMAP 10 ipsec-isakmp\n  set peer 203.0.113.1\n  set transform-set MYSET\n  match address 101\n\nПроверка: show crypto ipsec sa' }
+    ];
+}
+let currentFilter = 'all';
+function renderArticles(filter) {
+    if (filter) currentFilter = filter;
+    const tbody = document.getElementById('articles-body');
+    let articles = getArticles();
+    if (currentFilter !== 'all') articles = articles.filter(a => a.category === currentFilter);
+    if (!articles.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);">Нет статей</td></tr>'; return; }
+    tbody.innerHTML = articles.map(a => `
+        <tr>
+            <td>${a.id}</td>
+            <td><a href="#" onclick="viewArticle(${a.id});return false;" style="color:var(--primary);text-decoration:none;font-weight:600;">${a.title}</a></td>
+            <td><span class="adm-badge badge-online">${a.category}</span></td>
+            <td style="font-size:13px;color:var(--text-muted)">${a.description}</td>
+            <td style="color:var(--text-muted);font-size:13px">${a.date}</td>
+            <td style="display:flex;gap:6px">
+                <button class="btn-adm btn-close-ticket" onclick="viewArticle(${a.id})">👁 Открыть</button>
+                <button class="btn-adm btn-edit" onclick="editArticle(${a.id})">✏️ Изменить</button>
+                <button class="btn-adm btn-del" onclick="deleteArticle(${a.id})">🗑 Удалить</button>
+            </td>
+        </tr>`).join('');
+}
+function viewArticle(id) {
+    const article = getArticles().find(a => a.id === id);
+    if (!article) return;
+    document.getElementById('view-article-title').innerText = article.title;
+    document.getElementById('view-article-cat').innerText = article.category;
+    document.getElementById('view-article-desc').innerText = article.description;
+    document.getElementById('view-article-content').innerText = article.content || 'Содержимое статьи не заполнено.';
+    openModal('modal-view-article');
+}
+function filterArticles(cat) { currentFilter = cat; renderArticles(); }
+function saveArticle() {
+    const title = document.getElementById('a-title').value.trim();
+    const desc  = document.getElementById('a-desc').value.trim();
+    if (!title || !desc) { showAdmErr('a-err', 'Заполните все поля'); return; }
+    const articles = getArticles();
+    const id = articles.length ? Math.max(...articles.map(a => a.id)) + 1 : 1;
+    articles.push({ id, title, category: document.getElementById('a-category').value, description: desc, content: document.getElementById('a-content').value, date: new Date().toLocaleDateString('ru-RU') });
+    saveArticlesLocal(articles);
+    closeModal('modal-article');
+    ['a-title','a-desc','a-content'].forEach(x => document.getElementById(x).value = '');
+    renderArticles(); renderDashboard();
+}
+function editArticle(id) {
+    const article = getArticles().find(a => a.id === id);
+    if (!article) return;
+    document.getElementById('ea-id').value = article.id;
+    document.getElementById('ea-title').value = article.title;
+    document.getElementById('ea-category').value = article.category;
+    document.getElementById('ea-desc').value = article.description;
+    document.getElementById('ea-content').value = article.content || '';
+    openModal('modal-edit-article');
+}
+function updateArticle() {
+    const id = parseInt(document.getElementById('ea-id').value);
+    const title = document.getElementById('ea-title').value.trim();
+    const desc  = document.getElementById('ea-desc').value.trim();
+    if (!title || !desc) { showAdmErr('ea-err', 'Заполните все поля'); return; }
+    const articles = getArticles();
+    const idx = articles.findIndex(a => a.id === id);
+    if (idx === -1) return;
+    articles[idx] = { ...articles[idx], title, category: document.getElementById('ea-category').value, description: desc, content: document.getElementById('ea-content').value };
+    saveArticlesLocal(articles);
+    closeModal('modal-edit-article');
+    renderArticles(); renderDashboard();
+}
+function deleteArticle(id) {
+    if (!confirm('Удалить эту статью?')) return;
+    saveArticlesLocal(getArticles().filter(a => a.id !== id));
+    renderArticles(); renderDashboard();
+}
+function exportArticles() {
+    const data = getArticles().map(a => ({ 'ID': a.id, 'Тема': a.title, 'Категория': a.category, 'Описание': a.description, 'Дата': a.date }));
+    DB.exportToExcel(data, 'netsim_articles.xlsx', 'База знаний');
+}
+
+// ── USERS ─────────────────────────────────────────────────────
+function renderUsers() {
+    const tbody = document.getElementById('users-body');
+    const users = DB.getUsers();
+    if (!users.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);">Нет пользователей</td></tr>'; return; }
+    tbody.innerHTML = users.map(u => `
+        <tr>
+            <td>${u.id}</td>
+            <td><strong>${u.name}</strong></td>
+            <td><code style="color:var(--text-muted)">${u.login}</code></td>
+            <td>${progressBar(u.lessons_done || 0)}</td>
+            <td style="font-size:13px">${u.last_lesson || '—'}</td>
+            <td style="color:${(u.errors||0)>5?'var(--danger)':'inherit'}">${u.errors || 0}</td>
+            <td>${u.registered || '—'}</td>
+            <td><button class="btn-adm btn-del" onclick="deleteUser(${u.id})">Удалить</button></td>
+        </tr>`).join('');
+}
+function deleteUser(id) {
+    if (!confirm('Удалить этого пользователя?')) return;
+    DB.deleteUser(id);
+    renderUsers();
+    renderDashboard();
+}
+function exportUsers() {
+    const data = DB.getUsers().map(u => ({ 'ID': u.id, 'Имя': u.name, 'Логин': u.login, 'Уроков пройдено': u.lessons_done, 'Последний урок': u.last_lesson, 'Ошибок': u.errors, 'Дата регистрации': u.registered }));
+    DB.exportToExcel(data, 'netsim_users.xlsx', 'Пользователи');
+}
+function importUsers(event) {
+    DB.importFromExcel(event.target.files[0], (err, data) => {
+        if (err) return alert('Ошибка: ' + err.message);
+        const mapped = data.map((row, i) => ({
+            id: i + 1,
+            name:         row['Имя']            || row['name']         || '',
+            login:        row['Логин']           || row['login']        || 'user' + i,
+            password:     row['Пароль']          || row['password']     || '1234',
+            lessons_done: row['Уроков пройдено'] || row['lessons_done'] || 0,
+            last_lesson:  row['Последний урок']  || row['last_lesson']  || '—',
+            errors:       row['Ошибок']          || row['errors']       || 0,
+            registered:   row['Дата регистрации']|| row['registered']   || ''
+        }));
+        DB.saveUsers(mapped);
+        renderUsers();
+        renderDashboard();
+        alert('Импортировано пользователей: ' + mapped.length);
+    });
+}
+
+// ── TICKETS ───────────────────────────────────────────────────
+function renderTickets() {
+    const tbody   = document.getElementById('tickets-body');
+    const tickets = DB.getTickets();
+    if (!tickets.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);">Нет тикетов</td></tr>'; return; }
+    tbody.innerHTML = tickets.map(t => `
+        <tr>
+            <td>${t.id}</td>
+            <td>${t.user}</td>
+            <td>${t.problem}</td>
+            <td>${badge(t.status)}</td>
+            <td>${t.date}</td>
+            <td style="display:flex;gap:6px;flex-wrap:wrap;">
+                ${t.status === 'open'
+                    ? `<button class="btn-adm btn-close-ticket" onclick="openResolveModal(${t.id})">✓ Решить</button>`
+                    : `<button class="btn-adm btn-close-ticket" onclick="viewTicket(${t.id})">👁 Просмотр</button>`}
+                <button class="btn-adm btn-del" onclick="deleteTicket(${t.id})">Удалить</button>
+            </td>
+        </tr>`).join('');
+}
+function saveTicket() {
+    const user    = document.getElementById('t-user').value.trim();
+    const problem = document.getElementById('t-problem').value.trim();
+    if (!user || !problem) { showAdmErr('t-err', 'Заполните все поля'); return; }
+    DB.addTicket({ user, problem });
+    closeModal('modal-ticket');
+    document.getElementById('t-user').value = '';
+    document.getElementById('t-problem').value = '';
+    renderTickets();
+    renderDashboard();
+}
+let resolveTicketId = null;
+
+function openResolveModal(id) {
+    const ticket = DB.getTickets().find(t => t.id === id);
+    if (!ticket || ticket.status !== 'open') return;
+    resolveTicketId = id;
+    document.getElementById('resolve-ticket-title').innerText = 'Решить тикет #' + id;
+    document.getElementById('resolve-ticket-user').innerText = ticket.user;
+    document.getElementById('resolve-ticket-problem').innerText = ticket.problem;
+    document.getElementById('resolve-ticket-note').value = '';
+    document.getElementById('resolve-field-wrap').style.display = '';
+    document.getElementById('resolve-view-wrap').style.display = 'none';
+    document.getElementById('resolve-footer-actions').style.display = 'flex';
+    document.getElementById('resolve-err').style.display = 'none';
+    openModal('modal-resolve-ticket');
+    setTimeout(() => document.getElementById('resolve-ticket-note').focus(), 100);
+}
+
+function viewTicket(id) {
+    const ticket = DB.getTickets().find(t => t.id === id);
+    if (!ticket) return;
+    resolveTicketId = null;
+    document.getElementById('resolve-ticket-title').innerText = 'Тикет #' + id;
+    document.getElementById('resolve-ticket-user').innerText = ticket.user;
+    document.getElementById('resolve-ticket-problem').innerText = ticket.problem;
+    document.getElementById('resolve-field-wrap').style.display = 'none';
+    document.getElementById('resolve-view-wrap').style.display = '';
+    document.getElementById('resolve-ticket-view').innerText = ticket.resolution || 'Решение не указано.';
+    document.getElementById('resolve-ticket-date').innerText = ticket.resolvedDate
+        ? 'Дата решения: ' + ticket.resolvedDate
+        : 'Дата создания: ' + ticket.date;
+    document.getElementById('resolve-footer-actions').style.display = 'none';
+    openModal('modal-resolve-ticket');
+}
+
+function confirmResolveTicket() {
+    const note = document.getElementById('resolve-ticket-note').value.trim();
+    if (!note) { showAdmErr('resolve-err', 'Опишите, что было сделано'); return; }
+    if (!resolveTicketId) return;
+    DB.closeTicket(resolveTicketId, note);
+    closeModal('modal-resolve-ticket');
+    resolveTicketId = null;
+    renderTickets();
+    renderDashboard();
+}
+
+function deleteTicket(id) { DB.deleteTicket(id); renderTickets(); renderDashboard(); }
+function exportTickets() {
+    const statusLabel = s => s === 'open' ? 'Открыт' : 'Решён';
+    const data = DB.getTickets().map(t => ({
+        'ID': t.id,
+        'Пользователь': t.user,
+        'Проблема': t.problem,
+        'Статус': statusLabel(t.status),
+        'Решение': t.resolution || '',
+        'Дата': t.date,
+        'Дата решения': t.resolvedDate || ''
+    }));
+    DB.exportToExcel(data, 'netsim_tickets.xlsx', 'Тикеты');
+}
+
+// ── Вспомогательные ───────────────────────────────────────────
+function showAdmErr(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 3000);
+}
+
+// ── Инициализация ─────────────────────────────────────────────
+localStorage.removeItem('netsim_search_queries');
+renderDashboard();
+</script>
+</body>
+</html>

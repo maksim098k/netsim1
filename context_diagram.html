@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Контекстная диаграмма A-0 — Ивацевичский аграрный колледж</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .page {
+            width: 960px;
+            border: 2px solid #000;
+            background: #fff;
+        }
+
+        /* ── Шапка ── */
+        .header {
+            display: grid;
+            grid-template-columns: 1fr 200px 80px 80px 100px;
+            border-bottom: 1px solid #000;
+            font-size: 11px;
+        }
+        .header-cell {
+            padding: 4px 8px;
+            border-right: 1px solid #000;
+        }
+        .header-cell:last-child { border-right: none; }
+        .header-cell .label { color: #666; font-size: 9px; text-transform: uppercase; }
+        .header-cell .value { font-weight: bold; margin-top: 2px; }
+        .header-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .header-meta span { font-size: 10px; }
+        .header-status {
+            display: flex;
+            flex-direction: column;
+        }
+        .status-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 2px 4px;
+            font-size: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .status-row:last-child { border-bottom: none; }
+        .status-box {
+            width: 14px; height: 14px;
+            border: 1px solid #000;
+            flex-shrink: 0;
+        }
+        .status-box.filled { background: #000; }
+        .context-label {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 11px;
+        }
+        .context-label .top { color: #666; font-size: 9px; }
+        .context-label .big { font-size: 22px; font-weight: bold; color: #000; }
+
+        /* ── Диаграмма ── */
+        .diagram-area {
+            position: relative;
+            height: 580px;
+            padding: 0;
+        }
+
+        svg.diagram {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ── Подвал ── */
+        .footer {
+            display: grid;
+            grid-template-columns: 80px 1fr 120px;
+            border-top: 1px solid #000;
+        }
+        .footer-cell {
+            padding: 6px 10px;
+            border-right: 1px solid #000;
+            font-size: 11px;
+        }
+        .footer-cell:last-child { border-right: none; }
+        .footer-cell .label { color: #555; font-size: 9px; text-transform: uppercase; }
+        .footer-cell .value { font-weight: bold; font-size: 13px; margin-top: 2px; }
+        .node-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            font-family: 'Times New Roman', serif;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- ШАПКА -->
+    <div class="header">
+        <div class="header-cell">
+            <div class="label">USED AT:</div>
+            <div class="header-meta">
+                <span><b>AUTHOR:</b> &nbsp;Иванов Алексей</span>
+                <span><b>PROJECT:</b> ИАК</span>
+                <span><b>NOTES:</b> &nbsp;1 2 3 4 5 6 7 8 9 10</span>
+            </div>
+        </div>
+        <div class="header-cell">
+            <div class="header-meta">
+                <span><b>DATE:</b> &nbsp;04.05.2026</span>
+                <span><b>REV:</b> &nbsp;&nbsp;06.05.2026</span>
+            </div>
+        </div>
+        <div class="header-cell header-status">
+            <div class="status-row"><div class="status-box filled"></div> WORKING</div>
+            <div class="status-row"><div class="status-box"></div> DRAFT</div>
+            <div class="status-row"><div class="status-box"></div> RECOMMENDED</div>
+            <div class="status-row"><div class="status-box"></div> PUBLICATION</div>
+        </div>
+        <div class="header-cell">
+            <div class="label">READER</div>
+            <div style="margin-top:4px;font-size:10px;"></div>
+            <div class="label" style="margin-top:10px;">DATE</div>
+        </div>
+        <div class="header-cell context-label">
+            <div class="top">CONTEXT:</div>
+            <div class="big">TOP</div>
+        </div>
+    </div>
+
+    <!-- ДИАГРАММА SVG -->
+    <div class="diagram-area">
+        <svg class="diagram" viewBox="0 0 960 580" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="7"
+                        refX="9" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="#000"/>
+                </marker>
+            </defs>
+
+            <!-- ── ЦЕНТРАЛЬНЫЙ БЛОК ── -->
+            <rect x="310" y="170" width="340" height="200"
+                  fill="white" stroke="#000" stroke-width="2"/>
+            <text x="480" y="238" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold">Разработка сайта</text>
+            <text x="480" y="258" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold">для</text>
+            <text x="480" y="278" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold">Ивацевичского</text>
+            <text x="480" y="298" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold">аграрного</text>
+            <text x="480" y="318" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold">колледжа</text>
+
+            <!-- Номер блока -->
+            <text x="316" y="364" font-family="Arial" font-size="10" fill="#555">0</text>
+            <line x1="324" y1="355" x2="324" y2="370" stroke="#000" stroke-width="1"/>
+            <text x="630" y="364" font-family="Arial" font-size="10" fill="#555">0</text>
+
+            <!-- ══════════════════════════════════════ -->
+            <!-- ВХОДЫ (слева) -->
+
+            <!-- Вход 1: Данные пользователей -->
+            <line x1="60" y1="215" x2="310" y2="215"
+                  stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+            <text x="57" y="210" text-anchor="end" font-family="Arial" font-size="12">Данные</text>
+            <text x="57" y="225" text-anchor="end" font-family="Arial" font-size="12">пользователей</text>
+
+            <!-- Вход 2: Ввод команд -->
+            <line x1="60" y1="270" x2="310" y2="270"
+                  stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+            <text x="57" y="263" text-anchor="end" font-family="Arial" font-size="12">Ввод команд</text>
+            <text x="57" y="278" text-anchor="end" font-family="Arial" font-size="12">и конфигураций</text>
+
+            <!-- Вход 3: Знания и умения -->
+            <line x1="60" y1="325" x2="310" y2="325"
+                  stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+            <text x="57" y="318" text-anchor="end" font-family="Arial" font-size="12">Знания</text>
+            <text x="57" y="333" text-anchor="end" font-family="Arial" font-size="12">и умения</text>
+
+            <!-- ══════════════════════════════════════ -->
+            <!-- УПРАВЛЕНИЕ (сверху) -->
+
+            <!-- Управление 1: Техническое задание -->
+            <line x1="400" y1="60" x2="400" y2="170"
+                  stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+            <text x="400" y="50" text-anchor="middle" font-family="Arial" font-size="12">Техническое</text>
+            <text x="400" y="64" text-anchor="middle" font-family="Arial" font-size="12">задание</text>
+
+            <!-- Управление 2: Требования к системе -->
+            <line x1="560" y1="60" x2="560" y2="170"
+                  stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+            <text x="560" y="50" text-anchor="middle" font-family="Arial" font-size="12">Требования</text>
+            <text x="560" y="64" text-anchor="middle" font-family="Arial" font-size="12">к системе</text>
+
+            <!-- ══════════════════════════════════════ -->
+            <!-- ВЫХОДЫ (справа) -->
+
+            <!-- Выход 1: Готовый веб-симулятор -->
+            <line x1="650" y1="240" x2="900" y2="240"
+                  stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+            <text x="905" y="235" text-anchor="start" font-family="Arial" font-size="12">Готовый</text>
+            <text x="905" y="250" text-anchor="start" font-family="Arial" font-size="12">веб-симулятор</text>
+
+            <!-- Выход 2: Отчётная документация -->
+            <line x1="650" y1="310" x2="900" y2="310"
+                  stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+            <text x="905" y="305" text-anchor="start" font-family="Arial" font-size="12">Отчётная</text>
+            <text x="905" y="320" text-anchor="start" font-family="Arial" font-size="12">документация</text>
+            <text x="905" y="335" text-anchor="start" font-family="Arial" font-size="12">(Excel)</text>
+
+            <!-- ══════════════════════════════════════ -->
+            <!-- МЕХАНИЗМЫ (снизу) -->
+
+            <!-- Мех 1: Студент-разработчик -->
+            <line x1="380" y1="510" x2="380" y2="370"
+                  stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+            <text x="380" y="528" text-anchor="middle" font-family="Arial" font-size="12">Студент-</text>
+            <text x="380" y="543" text-anchor="middle" font-family="Arial" font-size="12">разработчик</text>
+
+            <!-- Мех 2: HTML/CSS/JavaScript -->
+            <line x1="480" y1="510" x2="480" y2="370"
+                  stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+            <text x="480" y="528" text-anchor="middle" font-family="Arial" font-size="12">HTML / CSS /</text>
+            <text x="480" y="543" text-anchor="middle" font-family="Arial" font-size="12">JavaScript</text>
+
+            <!-- Мех 3: Руководитель -->
+            <line x1="590" y1="510" x2="590" y2="370"
+                  stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+            <text x="590" y="528" text-anchor="middle" font-family="Arial" font-size="12">Руководитель</text>
+            <text x="590" y="543" text-anchor="middle" font-family="Arial" font-size="12">практики</text>
+
+        </svg>
+    </div>
+
+    <!-- ПОДВАЛ -->
+    <div class="footer">
+        <div class="footer-cell node-box">A-0</div>
+        <div class="footer-cell">
+            <div class="label">TITLE</div>
+            <div class="value">Разработка сайта для Ивацевичского аграрного колледжа</div>
+        </div>
+        <div class="footer-cell">
+            <div class="label">NUMBER</div>
+            <div class="value"></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Кнопка печати при нажатии Ctrl+P или просто открыть в браузере и сохранить как PDF
+    window.onkeydown = (e) => { if (e.ctrlKey && e.key === 'p') window.print(); };
+</script>
+</body>
+</html>

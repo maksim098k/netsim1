@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetSim - Выбор роли</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="landing-body">
+    <div class="landing-container">
+        <div class="landing-header">
+            <div class="logo-large"><span>🌐</span> NetSim</div>
+            <p>Интерактивная система обучения и управления компьютерными сетями</p>
+        </div>
+        
+        <h2 class="landing-title">Выберите режим работы системы</h2>
+        
+        <div class="roles-grid">
+            <a href="login.html" class="role-card user-role">
+                <div class="role-icon">💻</div>
+                <h3>Пользователь (Студент)</h3>
+                <p>Режим обучения: просмотр видеокурсов, выполнение практических заданий и работа с интерактивными тренажерами по настройке сетей.</p>
+                <div class="btn-mockup">Войти как Студент →</div>
+            </a>
+            
+            <a href="#" onclick="openAdminLogin(event)" class="role-card admin-role">
+                <div class="role-icon">🛡️</div>
+                <h3>Системный Администратор</h3>
+                <p>Режим управления: панель мониторинга локальной сети, работа с логами подключения, добавление устройств и статистика.</p>
+                <div class="btn-mockup">Войти в Панель Управления →</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Модальное окно пароля -->
+    <div class="modal-overlay" id="admin-login-modal" onclick="closeAdminLogin(event)">
+        <div class="modal" style="width: 400px; font-family: 'Inter', sans-serif;">
+            <div class="modal-header">
+                <h3>Защищенный доступ</h3>
+                <button class="close-btn" onclick="document.getElementById('admin-login-modal').classList.remove('active')">&times;</button>
+            </div>
+            <div class="modal-body" style="text-align: center; padding: 30px;">
+                <div class="role-icon" style="font-size: 48px; margin-bottom: 15px;">🔒</div>
+                <p style="margin-bottom: 20px; font-size: 15px; color: #333;">Введите пароль администратора для доступа к консоли управления:</p>
+                <input type="password" id="admin-pass" placeholder="Пароль (введите: admin)" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; outline: none; font-family: inherit;">
+                <div id="login-error" style="color: #ef4444; font-size: 13px; display: none; margin-bottom: 5px;">Неверный пароль!</div>
+            </div>
+            <div class="modal-footer" style="justify-content: center; background-color: #fff; padding-bottom: 30px; border-top: none;">
+                <button class="btn primary" onclick="checkAdminPassword()" style="width: 100%; background-color: #ef4444; color: white;">Войти</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openAdminLogin(e) {
+            e.preventDefault();
+            document.getElementById('admin-login-modal').classList.add('active');
+            document.getElementById('admin-pass').value = '';
+            document.getElementById('admin-pass').style.borderColor = '#ccc';
+            document.getElementById('login-error').style.display = 'none';
+            setTimeout(() => document.getElementById('admin-pass').focus(), 100);
+        }
+
+        function closeAdminLogin(e) {
+            if(e.target.id === 'admin-login-modal') {
+                document.getElementById('admin-login-modal').classList.remove('active');
+            }
+        }
+
+        function checkAdminPassword() {
+            const pass = document.getElementById('admin-pass').value;
+            if (pass === 'admin') { 
+                window.location.href = 'admin.html';
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+                document.getElementById('admin-pass').style.borderColor = '#ef4444';
+            }
+        }
+
+        document.getElementById('admin-pass').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAdminPassword();
+            }
+        });
+    </script>
+</body>
+</html>
